@@ -18,9 +18,9 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          
+
       - name: Spring Boot アプリのビルド
-        run: mvn -f backend/demo/pom.xml package -DskipTests
+        run: mvn -f my-inventory-app/backend/demo/pom.xml package -DskipTests
       
       - name: JARファイルの存在確認
         run: ls -lh backend/demo/target/
