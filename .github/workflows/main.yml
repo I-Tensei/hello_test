@@ -18,15 +18,15 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-      
+
       - name: ルートディレクトリ確認
         run: ls -lh
 
       - name: Spring Boot アプリのビルド
-        run: mvn -f Documents/研修/my-inventory-app/backend/demo/pom.xml package -DskipTests
-      
+        run: mvn -f "Documents/研修/my-inventory-app/backend/demo/pom.xml" package -DskipTests
+
       - name: JARファイルの存在確認
-        run: ls -lh Documents/研修/my-inventory-app/backend/demo/target/
+        run: ls -lh "Documents/研修/my-inventory-app/backend/demo/target/"
 
       - name: EC2 に JAR を転送
         uses: appleboy/scp-action@v0.1.4
@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          source: Documents/研修/my-inventory-app/backend/demo/target/demo-0.0.1-SNAPSHOT.jar
+          source: "Documents/研修/my-inventory-app/backend/demo/target/demo-0.0.1-SNAPSHOT.jar"
           target: /home/ec2-user/app/
 
       - name: EC2 でアプリを起動
@@ -44,7 +44,12 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            pkill -f 'java -jar' || true
-            nohup java -jar /home/ec2-user/app/*.jar > app.log 2>&1 &
+            echo "==== Java 確認 ===="
+            java -version || echo "Javaが見つかりません"
             
-      
+            echo "==== ファイル確認 ===="
+            ls -lh /home/ec2-user/app/
+            
+            echo "==== アプリ起動 ===="
+            pkill -f 'java -jar' || true
+            nohup java -jar /home/ec2-user/app/demo-0.0.1-SNAPSHOT.jar > /home/ec2-user/app/app.log 2>&1 &
