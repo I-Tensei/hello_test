@@ -10,25 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: リポジトリをチェックアウト
+      - name: ソースコードをチェックアウト
         uses: actions/checkout@v3
 
-      - name: Java セットアップ
+      - name: Java 17 をセットアップ
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: 'temurin'
 
-      - name: ルートディレクトリ確認
-        run: ls -lh
-
-      - name: Spring Boot アプリのビルド
-        run: mvn -f "Documents/研修/my-inventory-app/backend/demo/pom.xml" package -DskipTests
+      - name: Maven で Spring Boot アプリをビルド
+        working-directory: backend/demo
+        run: mvn package -DskipTests
 
       - name: JARファイルの存在確認
-        run: ls -lh "Documents/研修/my-inventory-app/backend/demo/target/"
+        working-directory: backend/demo
+        run: ls -lh target/
 
-      - name: EC2 に JAR を転送
+      - name: EC2 に JAR をアップロード
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -37,19 +36,15 @@ jobs:
           source: backend/demo/target/demo-0.0.1-SNAPSHOT.jar
           target: /home/ec2-user/app/
 
-      - name: EC2 でアプリを起動
+      - name: EC2 で Spring Boot アプリを起動
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            echo "==== Java 確認 ===="
+            echo "==== Java バージョン確認 ===="
             java -version || echo "Javaが見つかりません"
-            
-            echo "==== ファイル確認 ===="
-            ls -lh /home/ec2-user/app/
-            
-            echo "==== アプリ起動 ===="
+            echo "==== JAR 実行開始 ===="
             pkill -f 'java -jar' || true
             nohup java -jar /home/ec2-user/app/demo-0.0.1-SNAPSHOT.jar > /home/ec2-user/app/app.log 2>&1 &
