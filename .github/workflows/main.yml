@@ -20,8 +20,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Spring Boot アプリのビルド
-        working-directory: hello_test/backend/demo
-        run: ./mvnw package -DskipTests
+        run: ./backend/demo/mvnw package -DskipTests
       
       - name: JARファイルの存在確認
         run: ls -lh backend/demo/target/
