@@ -18,6 +18,9 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
+      
+      - name: ルートディレクトリ確認
+        run: ls -lh
 
       - name: Spring Boot アプリのビルド
         run: mvn -f my-inventory-app/backend/demo/pom.xml package -DskipTests
