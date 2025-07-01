@@ -16,7 +16,7 @@ jobs:
       - name: Java セットアップ
         uses: actions/setup-java@v3
         with:
-          java-version: '24'
+          java-version: 24
           distribution: 'temurin'
 
       - name: Spring Boot アプリのビルド
