@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Spring Boot アプリのビルド
-        working-directory: ./backend  # ← ここを変更（pom.xmlがあるディレクトリ）
+        working-directory: ./backend/demo  # ← ここを変更（pom.xmlがあるディレクトリ）
         run: ./mvnw package -DskipTests
 
       - name: EC2 に JAR を転送
