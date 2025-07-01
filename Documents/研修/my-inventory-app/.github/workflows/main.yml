@@ -1,0 +1,37 @@
+name: Build React + Spring Boot App
+
+on:
+  push:
+    branches:
+      - main  # または your-branch-name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v3
+
+      # フロントエンド（React）ビルド
+      - name: Node.js セットアップ
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Reactアプリのビルド
+        working-directory: ./frontend  # ←必要に応じてパス変更
+        run: |
+          npm install
+          npm run build
+
+      # バックエンド（Spring Boot）ビルド
+      - name: Java セットアップ
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Spring Bootのビルド
+        working-directory: ./backend  # ←必要に応じてパス変更
+        run: ./mvnw package
