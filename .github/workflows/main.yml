@@ -35,7 +35,7 @@ jobs:
           source: backend/demo/target/demo-0.0.1-SNAPSHOT.jar
           target: ./home/ec2-user/app/
 
-      - name: EC2 で Spring Boot アプリを起動
+      - name: EC2 で Spring Boot アプリを起動 #hostipを更新
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
