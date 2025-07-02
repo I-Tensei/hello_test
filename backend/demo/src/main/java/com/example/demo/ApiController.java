@@ -8,6 +8,6 @@ public class ApiController {
 
     @GetMapping("/api/message")
     public String getMessage() {
-        return "こんにちは、React！";
+        return "こんにちは、React！（更新）";
     }
 }
