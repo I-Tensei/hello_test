@@ -46,4 +46,4 @@ jobs:
             java -version || echo "Javaが見つかりません"
             echo "==== JAR 実行開始 ===="
             pkill -f 'java -jar' || true
-            nohup java -jar /home/ec2-user/app/backend/demo/target/demo-0.0.1-SNAPSHOT.jar
+            nohup java -jar /home/ec2-user/app/backend/demo/target/demo-0.0.1-SNAPSHOT.jar > /home/ec2-user/app/app.log 2>&1 &
